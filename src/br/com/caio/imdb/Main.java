@@ -1,8 +1,9 @@
 package br.com.caio.imdb;
 
-import java.awt.RenderingHints.Key;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
+import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse.BodyHandlers;
@@ -27,10 +28,18 @@ public class Main {
 		List<Map<String, String>> listaDeFilmes = parser.parse(body); 
 		
 		// Exibir e manipular dados
+		GeradorDeSticker geradorDeSticker = new GeradorDeSticker();
 		for (Map<String, String> filme : listaDeFilmes) {
-			System.out.println(filme.get("title"));	
-			System.out.println(filme.get("image"));
-			System.out.println(filme.get("imdbRating"));
+			
+	        String urlImagem = filme.get("image");
+	        String titulo = filme.get("title");
+	        
+			InputStream inputStream = new URL(urlImagem).openStream();
+			String nomeArquivo = titulo + " .png";
+			
+			geradorDeSticker.cria(inputStream, nomeArquivo);
+			
+			System.out.println(titulo);	
 			System.out.println();
 		}
 	}
